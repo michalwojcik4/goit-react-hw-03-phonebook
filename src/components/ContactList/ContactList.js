@@ -11,7 +11,7 @@ export function ContactList({ contacts, deleteContact }) {
       <ul className={css.list}>
         {contacts.map(contact => (
           <li className={css.list__item} key={contact.id}>
-            {contact.name}: {contact.number}{' '}
+            <p className={css.list__text}>{contact.name}: {contact.number}{' '}</p>
             <button
               className={css.list__button}
               type="button"
