@@ -35,6 +35,7 @@ li {
   flex-wrap: wrap;
   flex-direction: column;
   width: 100%;
+  gap: 3px;
 }
 
 .list:not(:last-child) {

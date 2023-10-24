@@ -18,10 +18,13 @@ export class App extends Component {
     const contactCheck = this.state.contacts.some(
       contact => contact.number === newContact.number
     );
+
     if (!contactCheck) {
+      const updateContacts = [...this.state.contacts, newContact];
       this.setState({
-        contacts: [...this.state.contacts, newContact],
+        contacts: updateContacts,
       });
+      localStorage.setItem('contacts', JSON.stringify(updateContacts));
       Notify.success('Great! Contact has been added');
     } else {
       Notify.failure('There is a contact for this number in the phone book');
@@ -42,11 +45,21 @@ export class App extends Component {
     );
   };
 
+  componentDidMount(){
+    const storedContacts = JSON.parse(localStorage.getItem('contacts'));
+    if (storedContacts) {
+      this.setState(prevState => ({ ...prevState, contacts: storedContacts }));
+    }
+  }
+
   deleteContact = contactId => {
+    const updateContacts = this.state.contacts.filter(contact => contact.id !== contactId);
     this.setState(prevState => ({
       ...prevState,
-      contacts: this.state.contacts.filter(contact => contact.id !== contactId),
+      contacts: updateContacts,
     }));
+    localStorage.setItem('contacts', JSON.stringify(updateContacts));
+    Notify.info('Contact has been removed');
   };
 
   render() {
@@ -56,7 +69,6 @@ export class App extends Component {
           <ContactForm addNewContact={this.addNewContact} />
         </div>
         <div className={css.container__box}>
-          
           <Filter handleFilter={this.handleFilter} />
           <ContactList
             contacts={this.SearchContact()}
